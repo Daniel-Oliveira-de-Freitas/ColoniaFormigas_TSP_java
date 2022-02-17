@@ -1,27 +1,38 @@
-package br.udesc.mca.paa.antcolony;
+ package br.udesc.mca.paa.antcolony;
 
 import static java.lang.Math.pow;
 import static java.lang.System.arraycopy;
 import static java.lang.System.out;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Label;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingConstants;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.LegendItem;
+import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class CaixeiroViajanteFormigas {
-    private static final int numCidades = 150;
-    private static final int numFormigas = 110;
-    private static final int viagens = 20;
+    private static final int numCidades = 15;
+    private static final int numFormigas = 11;
+    private static final int viagens = 3;
 
     private static final double alpha = 3; // peso do feromonio
     private static final double beta = 2; // peso da distancia
@@ -346,17 +357,30 @@ public class CaixeiroViajanteFormigas {
 
     private static void apresentaGrafico() {
         JFrame jf = new JFrame("Grafico das Formigas");
+        JLabel f = new JLabel();
+        JLabel nf = new JLabel();
+        long tempoFinal = System.currentTimeMillis();
         jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         XYSeries xy = new XYSeries("Distancia");
+        XYSeries xtt = new XYSeries(String.valueOf(tempoFinal)); 
         for (Integer v : resultados.keySet()) {
             xy.add(v, resultados.get(v));
         }
+        XYSeriesCollection col1 = new XYSeriesCollection(xtt); 
         XYSeriesCollection col = new XYSeriesCollection(xy);
         JFreeChart jfc = ChartFactory.createXYLineChart("ACO", "viagem", "Distância", col, PlotOrientation.VERTICAL,
                 true, true, false);
         ChartPanel cp = new ChartPanel(jfc);
+        nf.setText("Paramentros: "
+        		+ " | Núm.de Cidades:" + String.valueOf( numCidades )
+        		+ " | Núm.de Formigas: " + String.valueOf( numFormigas )
+        		+ " | Núm.de Cidades: " + String.valueOf( viagens ));
+        f.setText(" | Tempo de execução: " + String.valueOf(tempoFinal/1000000000) + " seg");
         jf.add(cp);
+        jf.add(nf);
+        jf.add(f);
         jf.pack();
+        jf.setLayout(new GridLayout());
         jf.setLocationRelativeTo(null);
         jf.setVisible(true);
     }
